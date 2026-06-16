@@ -7,7 +7,7 @@ import { JobApplication } from '../models/job-application';
   providedIn: 'root',
 })
 export class JobApplicationService {
-  private apiUrl = 'http://localhost:5258/api/JobApplications';
+  private apiUrl = 'https://job-tracker-21ny.onrender.com/api/JobApplications';
 
   constructor(private http: HttpClient) {}
 

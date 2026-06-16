@@ -58,5 +58,6 @@ app.UseCors("AngularPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGet("/", () => "Job Tracker API is running");
 
 app.Run();
