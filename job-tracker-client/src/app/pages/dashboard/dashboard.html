@@ -1,0 +1,219 @@
+<div class="min-h-screen bg-slate-100 text-slate-900">
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+      <div>
+        <p class="text-blue-600 font-semibold">Angular + ASP.NET Core</p>
+
+        <h1 class="text-4xl md:text-5xl font-bold mt-2">Job Application Tracker</h1>
+
+        <p class="text-slate-500 mt-3">Track applications, interviews, offers, and follow-ups.</p>
+      </div>
+
+      <div class="flex gap-4 items-center">
+        <button
+          type="button"
+          class="bg-blue-600 text-white rounded-xl px-5 py-3 font-semibold hover:bg-blue-500 transition"
+          (click)="showAddModal = true"
+        >
+          + Add Application
+        </button>
+
+        <div class="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
+          <p class="text-sm text-slate-500">Total Applications</p>
+          <p class="text-4xl font-bold">{{ applications.length }}</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Applied</p>
+        <p class="text-3xl font-bold mt-2 text-blue-600">{{ appliedCount }}</p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Interviewing</p>
+        <p class="text-3xl font-bold mt-2 text-yellow-500">{{ interviewCount }}</p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Offers</p>
+        <p class="text-3xl font-bold mt-2 text-green-600">{{ offerCount }}</p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <p class="text-sm text-slate-500">Rejected</p>
+        <p class="text-3xl font-bold mt-2 text-red-500">{{ rejectedCount }}</p>
+      </div>
+    </section>
+
+    <section class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-2xl font-bold">Applications</h2>
+        <p class="text-sm text-slate-500">Showing {{ filteredApplications.length }} result(s)</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input
+          class="bg-white border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="searchTerm"
+          placeholder="Search company..."
+        />
+
+        <select
+          class="bg-white border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="selectedStatus"
+        >
+          <option value="All">All Statuses</option>
+
+          @for (status of statusOptions; track status) {
+            <option [value]="status">
+              {{ status }}
+            </option>
+          }
+        </select>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      @for (app of filteredApplications; track app.id) {
+        <article
+          class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 hover:shadow-md transition"
+        >
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div
+                class="h-12 w-12 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center"
+              >
+                {{ app.companyName.charAt(0) }}
+              </div>
+
+              <div>
+                <h3 class="text-2xl font-bold">
+                  {{ app.companyName || 'Untitled Company' }}
+                </h3>
+
+                <p class="text-slate-500 mt-1">
+                  {{ app.position || 'No position added' }}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="text-red-500 hover:text-red-700 font-semibold"
+              (click)="deleteApplication(app.id)"
+            >
+              Delete
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-2">
+                Status
+              </p>
+
+              @if (editingStatusId !== app.id) {
+                <button
+                  type="button"
+                  class="inline-flex items-center rounded-full border px-3 py-1 text-sm font-semibold"
+                  [ngClass]="getStatusBadgeClass(app.status)"
+                  (click)="editingStatusId = app.id"
+                >
+                  {{ app.status }}
+                </button>
+              } @else {
+                <select
+                  class="border border-slate-300 rounded-xl px-3 py-2 text-sm"
+                  [(ngModel)]="app.status"
+                  (change)="updateStatus(app); editingStatusId = null"
+                >
+                  @for (status of statusOptions; track status) {
+                    <option [value]="status">
+                      {{ status }}
+                    </option>
+                  }
+                </select>
+              }
+            </div>
+
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-2">Notes</p>
+
+              <p class="text-slate-700">
+                {{ app.notes || 'No notes yet' }}
+              </p>
+            </div>
+
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-2">
+                Applied
+              </p>
+
+              <p class="text-slate-700">
+                {{ app.dateApplied | date: 'MMM d, y' }}
+              </p>
+            </div>
+          </div>
+        </article>
+      }
+    </section>
+
+    @if (showAddModal) {
+      <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Add Application</h2>
+
+            <button
+              type="button"
+              class="text-slate-500 hover:text-slate-800"
+              (click)="showAddModal = false"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <input
+              class="w-full border border-slate-300 rounded-xl px-4 py-3"
+              [(ngModel)]="newApplication.companyName"
+              placeholder="Company"
+            />
+
+            <input
+              class="w-full border border-slate-300 rounded-xl px-4 py-3"
+              [(ngModel)]="newApplication.position"
+              placeholder="Position"
+            />
+
+            <input
+              class="w-full border border-slate-300 rounded-xl px-4 py-3"
+              [(ngModel)]="newApplication.notes"
+              placeholder="Notes"
+            />
+          </div>
+
+          <div class="flex justify-end gap-3 mt-6">
+            <button
+              type="button"
+              class="border border-slate-300 rounded-xl px-4 py-2"
+              (click)="showAddModal = false"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              class="bg-blue-600 text-white rounded-xl px-4 py-2"
+              (click)="addApplication(); showAddModal = false"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+</div>
