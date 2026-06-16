@@ -16,4 +16,18 @@ export class AuthService {
       password,
     });
   }
+  register(email: string, password: string) {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/register`, {
+      email,
+      password,
+    });
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }

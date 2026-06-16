@@ -2,21 +2,44 @@
   <main class="max-w-6xl mx-auto px-6 py-10">
     <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
       <div>
-        <p class="text-blue-600 font-semibold">Angular + ASP.NET Core</p>
+        <h1 class="text-4xl md:text-5xl font-bold">Job Application Tracker</h1>
 
-        <h1 class="text-4xl md:text-5xl font-bold mt-2">Job Application Tracker</h1>
+        <div class="flex items-center gap-3 mt-3">
+          <div
+            class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold"
+          >
+            {{ userEmail.charAt(0).toUpperCase() }}
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-500">Welcome back</p>
+            <p class="font-medium text-slate-700">
+              {{ userEmail }}
+            </p>
+          </div>
+        </div>
 
         <p class="text-slate-500 mt-3">Track applications, interviews, offers, and follow-ups.</p>
       </div>
 
       <div class="flex gap-4 items-center">
-        <button
-          type="button"
-          class="bg-blue-600 text-white rounded-xl px-5 py-3 font-semibold hover:bg-blue-500 transition"
-          (click)="showAddModal = true"
-        >
-          + Add Application
-        </button>
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="px-4 py-2 bg-white border border-slate-300 rounded-xl hover:bg-slate-50"
+            (click)="logout()"
+          >
+            Sign Out
+          </button>
+
+          <button
+            type="button"
+            class="bg-blue-600 text-white rounded-xl px-5 py-3 font-semibold hover:bg-blue-500"
+            (click)="showAddModal = true"
+          >
+            + Add Application
+          </button>
+        </div>
 
         <div class="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
           <p class="text-sm text-slate-500">Total Applications</p>

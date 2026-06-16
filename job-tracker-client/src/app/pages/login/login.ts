@@ -24,6 +24,7 @@ export class Login {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
+        localStorage.setItem('email', this.email);
 
         this.router.navigate(['/dashboard']);
       },

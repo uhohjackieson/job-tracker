@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 import { JobApplication } from '../../models/job-application';
 import { JobApplicationService } from '../../services/job-application';
@@ -37,8 +39,12 @@ export class Dashboard implements OnInit {
     notes: '',
   };
 
+  userEmail = localStorage.getItem('email') ?? '';
+
   constructor(
     private jobService: JobApplicationService,
+    private authService: AuthService,
+    private router: Router,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -155,5 +161,9 @@ export class Dashboard implements OnInit {
       default:
         return 'bg-blue-100 text-blue-700 border-blue-200';
     }
+  }
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
