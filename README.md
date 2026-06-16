@@ -19,6 +19,15 @@
 
 ## Screenshots
 
+### Login
+![Login](screenshots/login.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Add Application Modal
+![Add Modal](screenshots/add-modal.png)
+
 ## Future Improvements
 - PostgreSQL
 - Deployment
