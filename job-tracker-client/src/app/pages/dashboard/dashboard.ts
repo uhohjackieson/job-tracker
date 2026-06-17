@@ -31,8 +31,9 @@ export class Dashboard implements OnInit {
   selectedStatus = 'All';
   searchTerm = '';
   isSaving = false;
+  updatingStatusId: number | null = null;
 
-  newApplication = {
+  newApplication: Omit<JobApplication, 'id' | 'userId'> = {
     companyName: '',
     position: '',
     status: 'Applied',
@@ -105,13 +106,19 @@ export class Dashboard implements OnInit {
   }
 
   updateStatus(application: JobApplication): void {
+    this.updatingStatusId = application.id;
+
     this.jobService.updateApplication(application).subscribe({
       next: () => {
+        this.updatingStatusId = null;
         this.editingStatusId = null;
-        this.cdr.detectChanges();
+        this.loadApplications();
       },
       error: (error: unknown) => {
+        this.updatingStatusId = null;
         console.error(error);
+        alert('Status update failed. Please try again.');
+        this.loadApplications();
       },
     });
   }

@@ -150,7 +150,8 @@
                 <select
                   class="border border-slate-300 rounded-xl px-3 py-2 text-sm"
                   [(ngModel)]="app.status"
-                  (change)="updateStatus(app); editingStatusId = null"
+                  [disabled]="updatingStatusId === app.id"
+                  (change)="updateStatus(app)"
                 >
                   @for (status of statusOptions; track status) {
                     <option [value]="status">
@@ -230,7 +231,7 @@
             <button
               type="button"
               class="bg-blue-600 text-white rounded-xl px-4 py-2"
-              (click)="addApplication(); showAddModal = false"
+              (click)="addApplication()"
             >
               @if (isSaving) {
                 <div
