@@ -24,7 +24,13 @@
         (click)="register()"
         class="w-full bg-blue-600 text-white rounded-xl py-3 font-semibold hover:bg-blue-500"
       >
-        Register
+        @if (isLoading) {
+          <div
+            class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+          ></div>
+        }
+
+        {{ isLoading ? 'Creating Account...' : 'Register' }}
       </button>
     </div>
 

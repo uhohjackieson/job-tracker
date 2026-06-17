@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 export class Register {
   email = '';
   password = '';
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -21,13 +22,17 @@ export class Register {
   ) {}
 
   register(): void {
+    this.isLoading = true;
+
     this.authService.register(this.email, this.password).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('email', this.email);
+        this.isLoading = false;
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
+        this.isLoading = false;
         console.error(error);
         alert('Registration failed');
       },

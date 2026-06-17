@@ -30,6 +30,7 @@ export class Dashboard implements OnInit {
   showAddModal = false;
   selectedStatus = 'All';
   searchTerm = '';
+  isSaving = false;
 
   newApplication = {
     companyName: '',
@@ -67,6 +68,8 @@ export class Dashboard implements OnInit {
   }
 
   addApplication(): void {
+    this.isSaving = true;
+
     this.jobService.createApplication(this.newApplication).subscribe({
       next: () => {
         this.loadApplications();
@@ -79,9 +82,11 @@ export class Dashboard implements OnInit {
           notes: '',
         };
 
+        this.isSaving = false;
         this.showAddModal = false;
       },
       error: (error: unknown) => {
+        this.isSaving = false;
         console.error(error);
       },
     });
